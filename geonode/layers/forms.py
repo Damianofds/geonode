@@ -23,8 +23,13 @@ import tempfile
 import zipfile
 import autocomplete_light
 
+
 from django.conf import settings
 from django import forms
+
+#from django import forms
+import floppyforms as forms
+
 try:
     import json
 except ImportError:

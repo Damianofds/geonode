@@ -131,6 +131,28 @@ class Profile(AbstractUser):
     def location(self):
         return format_address(self.delivery, self.zipcode, self.city, self.area, self.country)
 
+class Contact(models.Model):
+   
+    """A contact in the responsible parties Address Book"""
+
+    position_name = models.CharField(
+        _('position name'),
+        max_length=255,
+        null=True,
+        blank=False)
+    role = models.CharField(
+        _('role'),
+        max_length=255,
+        null=True,
+        blank=False)
+    organization_name = models.CharField(
+        _('organization name'),
+        max_length=255,
+        null=True,
+        blank=False)
+    email_address = models.EmailField(
+        _('email address'),
+        blank=False)
 
 def get_anonymous_user_instance(Profile):
     return Profile(username='AnonymousUser')

@@ -175,7 +175,6 @@ class ResourceBaseForm(TranslationModelForm):
             'bbox_y0',
             'bbox_y1',
             'srid',
-            'category',
             'csw_typename',
             'csw_schema',
             'csw_mdsource',

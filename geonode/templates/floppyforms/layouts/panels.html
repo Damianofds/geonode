@@ -1,0 +1,259 @@
+{% load floppyforms %}
+{% load i18n %}
+
+
+<style>
+    .xxs-font-size{
+        font-size: 10px;    
+    }
+    textarea{
+        width:100%;
+    }
+    select{
+        width:100%;
+    }
+    .test-class{
+        background-color: red; 
+    }
+</style>
+
+<br />
+<ul class="nav nav-tabs">
+    <li class="active">    
+        <a data-toggle="tab" href="#mandatory">Mandatory</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#advanced">Advanced</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#ownership">Ownership</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+
+    <div id="mandatory" class="tab-pane fade in active">
+        <br />
+        <p>Mandatory Metadata for ISO19115</p>
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">Data info</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                                <div>
+                                    <span><label for="{{ layer_form.title|id }}">Title</label></span>
+                                    <p class="xxs-font-size">(Name by which the cited resource is known)</p>
+                                    {% formfield layer_form.title %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.abstract|id }}">Abstract</label></span>
+                                    <p class="xxs-font-size">(Brief narrative summary of the content of the resource/s)</p>
+                                    {% formfield layer_form.abstract %}
+                                </div>
+                            
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.date|id }}">Date</label></span>
+                                <p class="xxs-font-size">(When a given event occurred on the resource)</p>
+                                {% formfield layer_form.date %}
+                            </div>
+                            <hr />
+                            <div>
+                                <span><label for="{{ layer_form.date_type|id }}">Date Type</label></span>
+                                <p class="xxs-font-size">(Identification of when a given event occurred)</p>
+                                {% formfield layer_form.date_type %}
+                            </div>
+                            <hr />
+                            <div>
+                                <span><label for="{{ layer_form.keywords|id }}">Keywords</label></span>
+                                <p class="xxs-font-size">(A space or comma separated list of keywords)</p>
+                                {% formfield layer_form.keywords %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.category|id }}">Category</label></span>
+                                {% formfield layer_form.category %}
+                            </div>
+                            <hr />
+                            <div>
+                                <span><label for="{{ layer_form.thumbnail_url|id }}">Thumbnail</label></span>
+                                <img src="{{ layer_form.thumbnail_url.value }}" />
+                                <a href="metadata_thumbnail">set preview</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.regions|id }}">Regions</label></span>
+                                {% formfield layer_form.regions %}
+                            </div>
+                        </div>
+                    </div>
+                            
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Metadata info</div>
+                    <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.language|id }}">Language</label></span>
+                                <p class="xxs-font-size">(Language used within the dataset)</p>
+                                {% formfield layer_form.language %}
+                            </div>
+                            <hr />
+                            <div>
+                                <span><label for="{{ layer_form.restriction_code_type|id }}">Restrictions</label></span>
+                                <p class="xxs-font-size">(Limitation/s placed upon the access or use of data)</p>
+                                {% formfield layer_form.restriction_code_type %}
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.constraints_other|id }}">Other Restrictions</label></span>
+                                <p class="xxs-font-size">(Other restrictions and legal prerequisites for accessing or use data and metadata)</p>
+                                {% formfield layer_form.constraints_other %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.license|id }}">License</label></span>
+                                <p class="xxs-font-size">(License of the dataset)</p>
+                                {% formfield layer_form.license %}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div>
+                                <span><label for="{{ layer_form.data_quality_statement|id }}">Data Quality Statement</label></span>
+                                <p class="xxs-font-size">(General explanation of the data producer's knowledge about the lineage)</p>
+                                {% formfield layer_form.data_quality_statement %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="advanced" class="tab-pane fade">
+        <br />
+        <p>Other, Optional, Metadata</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Data Optional info</div>
+                    
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>
+                                    <span><label for="{{ layer_form.edition|id }}">Resource Edition</label></span>
+                                    <p class="xxs-font-size">(Version of the cited resource)</p>
+                                    {% formfield layer_form.edition %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.purpose|id }}">Purpose</label></span>
+                                    <p class="xxs-font-size">(Brief narrative summary of the intentions with which the resource/s ...)</p>
+                                    {% formfield layer_form.purpose %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.supplemental_information|id }}">Supplemental Info</label></span>
+                                    <p class="xxs-font-size">(Any other descriptive information about the dataset)</p>
+                                    {% formfield layer_form.supplemental_information %}
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div>
+                                    <span><label for="{{ layer_form.temporal_extent_start|id }}">Temporal Extent Start</label></span>
+                                    <p class="xxs-font-size">(When a given event occurred on the resource)</p>
+                                    {% formfield layer_form.temporal_extent_start %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.temporal_extent_end|id }}">Temporal Extent End</label></span>
+                                    <p class="xxs-font-size">(Identification of when a given event occurred)</p>
+                                    {% formfield layer_form.temporal_extent_end %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.maintenance_frequency|id }}">Maintenance Frequency</label></span>
+                                    <p class="xxs-font-size">(Identification of when a given event occurred)</p>
+                                    {% formfield layer_form.maintenance_frequency %}
+                                </div>
+                                <hr />
+                                <div>
+                                    <span><label for="{{ layer_form.spatial_representation_type|id }}">Spatial Repr. Type</label></span>
+                                    <p class="xxs-font-size">(Method used to represent geographic information in the dataset)</p>
+                                    {% formfield layer_form.spatial_representation_type %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Dataset Attributes</div>
+                    <div class="panel-body">
+                        {{ attribute_form.management_form }}
+                        <div class="row" style="width:90%;">
+                            <div class="row">
+                                <div class="col-xs-3" style="text-align:center;"><b>{% trans "Attribute" %}</b></div>
+                                <div class="col-xs-3" style="text-align:center;"><b>{% trans "Label" %}</b></div>
+                                <div class="col-xs-3" style="text-align:center;"><b>{% trans "Description" %}</b></div>
+                                <div class="col-xs-3" style="text-align:center;"><b>{% trans "Display Order" %}</b></div>
+                            </div>
+                            {% for form in attribute_form.forms %}
+                                <div class="row">
+                                    <div class="col-xs-3"><div><div style="display:none">{{form.id}}</div>{{form.attribute}}</div></div>
+                                    <div class="col-xs-3"><div> {{form.attribute_label}}</div></div>
+                                    <div class="col-xs-3"><div> {{form.description}}</div></div>
+                                    <div class="col-xs-3"><div> {{form.display_order}}</div></div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="ownership" class="tab-pane fade">
+        <br />
+        <p>Owner, Permissions and Responsible Parties</p>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Responsible Parties</div>
+                    <div class="panel-body">
+                        {% form contact_form  using "floppyforms/layouts/responsible_parties.html" %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Owner and Permissions</div>
+                    <div class="panel-body">
+                        <div>
+                            <span><label for="{{ layer_form.owner|id }}">Owner</label></span>
+                            <p class="xxs-font-size">(Owner of the cited resource)</p>
+                            {% formfield layer_form.owner %}
+                        </div>
+                        <hr />
+                        <div>
+                            {% include "_permissions.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

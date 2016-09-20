@@ -23,19 +23,28 @@ import tempfile
 import zipfile
 import autocomplete_light
 
+
 from django.conf import settings
 from django import forms
+
+#from django import forms
+import floppyforms as forms
+import logging
+
 try:
     import json
 except ImportError:
     from django.utils import simplejson as json
 from geonode.layers.utils import unzip_file
 from geonode.layers.models import Layer, Attribute
+from geonode.people.models import Contact
 
 autocomplete_light.autodiscover() # flake8: noqa
 
 from geonode.base.forms import ResourceBaseForm
+from django.forms import ModelForm
 
+logger = logging.getLogger("geonode.layers.views")
 
 class JSONField(forms.CharField):
 
@@ -60,7 +69,33 @@ class LayerForm(ResourceBaseForm):
             'styles',
             'upload_session',
             'service',)
+        
+    def __init__(self, *args, **kwargs):
+        super(ResourceBaseForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            help_text = self.fields[field].help_text
+            self.fields[field].help_text = None
+            if help_text != '':
+                self.fields[field].widget.attrs.update(
+                    {
+                        'class': 'has-external-popover',
+                        'data-content': help_text,
+                        'data-placement': 'right',
+                        'data-container': 'body',
+                        'data-html': 'true'})
 
+class ContactForm(ModelForm):
+
+    class Meta:
+        model = Contact
+        fields = (
+           'position_name',
+           'role',
+           'organization_name',
+           'email_address',)
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
 
 class LayerUploadForm(forms.Form):
     base_file = forms.FileField()

@@ -316,6 +316,9 @@ INSTALLED_APPS = (
     "pinax_theme_bootstrap",
     'django_forms_bootstrap',
 
+    # Forms
+    'floppyforms',
+
     # Social
     'account',
     'avatar',

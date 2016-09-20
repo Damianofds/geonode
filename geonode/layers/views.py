@@ -65,6 +65,8 @@ from geonode.utils import build_social_links
 from geonode.geoserver.helpers import cascading_delete, gs_catalog
 from geonode.geoserver.helpers import ogc_server_settings
 
+from geonode.layers.forms import ContactForm
+
 if 'geonode.geoserver' in settings.INSTALLED_APPS:
     from geonode.geoserver.helpers import _render_thumbnail
 CONTEXT_LOG_FILE = ogc_server_settings.LOG_FILE
@@ -201,7 +203,7 @@ def layer_upload(request, template='upload/layer_upload.html'):
                 if tempdir is not None:
                     shutil.rmtree(tempdir)
         else:
-            for e in form.errors.values():
+            for e in form.errorsc.values():
                 errormsgs.extend([escape(v) for v in e])
             out['errors'] = form.errors
             out['errormsgs'] = errormsgs
@@ -214,6 +216,9 @@ def layer_upload(request, template='upload/layer_upload.html'):
             content_type='application/json',
             status=status_code)
 
+
+def metadata_thumbnail(request, layername, template='layers/metadata_thumbnail.html'):
+    return layer_detail(request, layername, template)
 
 def layer_detail(request, layername, template='layers/layer_detail.html'):
     layer = _resolve_layer(
@@ -381,9 +386,9 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
         category_form = CategoryForm(
             prefix="category_choice_field",
             initial=topic_category.id if topic_category else None)
-
+    
     if request.method == "POST" and layer_form.is_valid(
-    ) and attribute_form.is_valid() and category_form.is_valid():
+    ) and attribute_form.is_valid():
         new_poc = layer_form.cleaned_data['poc']
         new_author = layer_form.cleaned_data['metadata_author']
 
@@ -395,14 +400,6 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
                     instance=poc)
             else:
                 poc_form = ProfileForm(request.POST, prefix="poc")
-            if poc_form.is_valid():
-                if len(poc_form.cleaned_data['profile']) == 0:
-                    # FIXME use form.add_error in django > 1.7
-                    errors = poc_form._errors.setdefault('profile', ErrorList())
-                    errors.append(_('You must set a point of contact for this resource'))
-                    poc = None
-            if poc_form.has_changed and poc_form.is_valid():
-                new_poc = poc_form.save()
 
         if new_author is None:
             if metadata_author is None:
@@ -410,17 +407,8 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
                                           instance=metadata_author)
             else:
                 author_form = ProfileForm(request.POST, prefix="author")
-            if author_form.is_valid():
-                if len(author_form.cleaned_data['profile']) == 0:
-                    # FIXME use form.add_error in django > 1.7
-                    errors = author_form._errors.setdefault('profile', ErrorList())
-                    errors.append(_('You must set an author for this resource'))
-                    metadata_author = None
-            if author_form.has_changed and author_form.is_valid():
-                new_author = author_form.save()
 
-        new_category = TopicCategory.objects.get(
-            id=category_form.cleaned_data['category_choice_field'])
+        new_category = ""
 
         for form in attribute_form.cleaned_data:
             la = Attribute.objects.get(id=int(form['id'].id))
@@ -429,7 +417,8 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
             la.visible = form["visible"]
             la.display_order = form["display_order"]
             la.save()
-
+        
+        the_layer = layer_form.save()
         if new_poc is not None and new_author is not None:
             new_keywords = [x.strip() for x in layer_form.cleaned_data['keywords']]
             layer.keywords.clear()
@@ -458,23 +447,11 @@ def layer_metadata(request, layername, template='layers/layer_metadata.html'):
                         layer.service_typename,
                     )))
 
-    if poc is not None:
-        layer_form.fields['poc'].initial = poc.id
-        poc_form = ProfileForm(prefix="poc")
-        poc_form.hidden = True
-
-    if metadata_author is not None:
-        layer_form.fields['metadata_author'].initial = metadata_author.id
-        author_form = ProfileForm(prefix="author")
-        author_form.hidden = True
-
     return render_to_response(template, RequestContext(request, {
         "layer": layer,
         "layer_form": layer_form,
-        "poc_form": poc_form,
-        "author_form": author_form,
         "attribute_form": attribute_form,
-        "category_form": category_form,
+        "contact_form": ContactForm,
     }))
 
 

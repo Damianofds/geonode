@@ -1,0 +1,39 @@
+{% load floppyforms %}
+
+{% block forms %}
+    {% for form in forms %}
+        {% block errors %}{% if form.non_field_errors or form|hidden_field_errors %}<tr><td colspan="2"><ul class="errorlist">
+            {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            {% for error in form|hidden_field_errors %}<li>{{ error }}</li>{% endfor %}
+        </ul></td></tr>{% endif %}
+        {% endblock %}
+        {% block rows %}
+            {% form form using %}{# needed to push the context for the formconfig #}
+                
+                <table>
+                    <tr>
+                        <td>
+                            <span><label for="{{ form.position_name|id }}">Position Name</label></span>
+                            {{ form.position_name }}
+                        </td>
+                        <td>
+                            <span><label for="{{ form.role|id }}">Role</label></span>
+                            {{ form.role }}
+                        </td>
+                    <tr>
+                    <tr>
+                        <td>
+                            <span><label for="{{ form.organization_name|id }}">Organization Name</label></span>
+                            {{ form.organization_name }}
+                        </td>
+                        <td>
+                            <span><label for="{{ form.email_address|id }}">Email Address</label></span>
+                            {{ form.email_address }}
+                        </td>
+                    </tr>
+                </table>
+                
+            {% endform %}
+        {% endblock %}
+    {% endfor %}
+{% endblock %}
